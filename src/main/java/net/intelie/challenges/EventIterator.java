@@ -1,12 +1,14 @@
 package net.intelie.challenges;
 
 import java.io.Closeable;
+// The following imports was used to perform events lists inside the iterator.
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventIterator implements EventIteratorInterface {
 
-    private int currentIndex = 0;
+    private final int START_INDEX = 0;
+    private int currentIndex = START_INDEX;
     private boolean empty = true;
     private List<Event> filtered = new ArrayList<>();
 
@@ -22,7 +24,7 @@ public class EventIterator implements EventIteratorInterface {
      */
     @Override
     public boolean moveNext() {
-        if (currentIndex < filtered.size()) {
+        if (currentIndex < filtered.size()-1) {
             currentIndex++;
             return true;
         }
@@ -53,6 +55,7 @@ public class EventIterator implements EventIteratorInterface {
     @Override
     public void remove() {
         if (!empty) {
+            // Once we need to change data at this point, is necessary to synchronize this action!
             synchronized (this.filtered) {
                 this.filtered.remove(current());
                 if (this.currentIndex == filtered.size()) {
@@ -66,11 +69,20 @@ public class EventIterator implements EventIteratorInterface {
         }
     }
 
+    /**
+     * Go back iterator to the first position
+     * This method was created to test this class
+     */
     public void first() {
-        currentIndex = 0;
+        // reset current index to start value
+        currentIndex = START_INDEX;
     }
-
+    /**
+     * Go to the last position if not empty
+     * This method was created to test this class
+     */
     public void last() {
+        // if not empty, update currentIndex with the last position.
         if (!empty) {
             currentIndex = filtered.size() - 1;
         } else {
@@ -78,6 +90,10 @@ public class EventIterator implements EventIteratorInterface {
         }
     }
 
+    /**
+     * Returns the iterator size.
+     * This method was created to test this class
+     */
     public int size() {
         return filtered.size();
     }

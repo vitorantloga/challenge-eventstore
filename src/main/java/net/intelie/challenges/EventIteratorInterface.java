@@ -28,9 +28,18 @@ public interface EventIteratorInterface extends AutoCloseable {
      */
     void remove();
 
+    /**
+     * Go back to first position.
+     */
     void first();
 
+    /**
+     * Goes to the last position.
+     */
     void last();
 
+    /**
+     * Returns the iterator size.
+     */
     int size();
 }

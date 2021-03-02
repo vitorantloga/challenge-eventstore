@@ -1,12 +1,12 @@
 package net.intelie.challenges;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList; // To perform events lists
+import java.util.List; // Also to perform events lists
+import java.util.Map; // To store events list in memory (store)
+import java.util.concurrent.ConcurrentHashMap; // To perform concurrent access to Map (store)
 
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
+import static java.util.Comparator.comparing; // to compare results and filter by type (query)
+import static java.util.stream.Collectors.toList; // To cast to List format after stream->Filter (query)
 
 public class EventStore implements EventStoreInterface{
     final private Map<String, List<Event>> storedEvents = new ConcurrentHashMap<>();
@@ -19,8 +19,8 @@ public class EventStore implements EventStoreInterface{
      */
     public void insert(Event event) {
         // Creates a List with the new event
-        eventList.add(event);
-        this.storedEvents.put(event.type(), eventList);
+        this.eventList.add(event);
+        this.storedEvents.put("eventStore", this.eventList);
     }
 
     /**
@@ -30,7 +30,7 @@ public class EventStore implements EventStoreInterface{
      */
     public void removeAll(String type) {
         eventList.removeIf(e -> e.type().equals(type));
-        this.storedEvents.put(type, eventList);
+        this.storedEvents.put("eventStore", eventList);
     }
 
     /**
@@ -56,5 +56,9 @@ public class EventStore implements EventStoreInterface{
                         .collect(toList());
 
         return new EventIterator(filtered);
+    }
+
+    public int getSize() {
+        return storedEvents.get("eventStore").size();
     }
 }
